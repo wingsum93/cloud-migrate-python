@@ -19,16 +19,22 @@ def compare_file_lists(gdrive_df, onedrive_df):
     gdrive_set = set(gdrive_df["id"])
     onedrive_set = set(onedrive_df["id"])
 
-    only_in_gdrive = gdrive_set - onedrive_set
-    only_in_onedrive = onedrive_set - gdrive_set
+    only_in_gdrive_ids = gdrive_set - onedrive_set
+    only_in_onedrive_ids = onedrive_set - gdrive_set
 
-    print(f"\n🔍 Files only in Google Drive: {len(only_in_gdrive)}")
-    for item in list(only_in_gdrive)[:10]:
-        print(" -", item)
+    # 篩選出原始資料
+    only_in_gdrive = gdrive_df[gdrive_df["id"].isin(only_in_gdrive_ids)].sort_values(by="Size", ascending=False)
+    only_in_onedrive = onedrive_df[onedrive_df["id"].isin(only_in_onedrive_ids)].sort_values(by="Size", ascending=False)
 
-    print(f"\n🔍 Files only in OneDrive: {len(only_in_onedrive)}")
-    for item in list(only_in_onedrive)[:10]:
-        print(" -", item)
+
+    # 輸出前 10 個結果
+    print(f"\n📂 Files only in Google Drive: {len(only_in_gdrive)}")
+    for _, row in only_in_gdrive.head(10).iterrows():
+        print(f" - {row['Path']} ({row['Size']:,} bytes)")
+
+    print(f"\n📂 Files only in OneDrive: {len(only_in_onedrive)}")
+    for _, row in only_in_onedrive.head(10).iterrows():
+        print(f" - {row['Path']} ({row['Size']:,} bytes)")
 
     return only_in_gdrive, only_in_onedrive
 
