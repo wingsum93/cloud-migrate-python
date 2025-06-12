@@ -21,6 +21,10 @@ python search_files_by_name.py gdrive .mp4
 python search_files_by_name.py gdrive 2021
 ```
 
+### Count files size of a folder
+```sh
+python count_remote_folder_size.py gdrive /folder
+```
 ### move file between cloud (from g to one)
 ```sh
 rclone copy "gdrive:tv" "onedrive:tv" --progress
